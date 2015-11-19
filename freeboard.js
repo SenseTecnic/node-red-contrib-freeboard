@@ -74,11 +74,11 @@ module.exports = function(RED) {
 	setInterval(interval,60000);
 
 
-	RED.httpNode.use(bodyParser.urlencoded({
+	RED.httpAdmin.use(bodyParser.urlencoded({
 		extended: true
 	}));
-	RED.httpNode.use("/freeboard",express.static(__dirname + '/node_modules/freeboard'));
-	RED.httpNode.get("/freeboard_api/datasources",
+	RED.httpAdmin.use("/freeboard",express.static(__dirname + '/node_modules/freeboard'));
+	RED.httpAdmin.get("/freeboard_api/datasources",
 		function (req,res){
 			res.write(dslib);
 			for (var i in nodes){
@@ -87,7 +87,7 @@ module.exports = function(RED) {
 			res.end();
 		}
 	);
-	RED.httpNode.post("/freeboard_api/dashboard",
+	RED.httpAdmin.post("/freeboard_api/dashboard",
 		function (req,res){
 			fs.writeFile(userDir+"freeboard_"+req.body.name+".json", req.body.content, function (err, data) {
 				if (err) throw err;
@@ -96,7 +96,7 @@ module.exports = function(RED) {
 
 		}
 	);
-	RED.httpNode.get("/freeboard_api/datasourceupdate",
+	RED.httpAdmin.get("/freeboard_api/datasourceupdate",
 		function (req,res){
 			if(req.param("direct",false)){
 				var ret={};
@@ -109,7 +109,7 @@ module.exports = function(RED) {
 			}
 		}
 	);
-	RED.httpNode.get("/freeboard_api/dashboard/:name",
+	RED.httpAdmin.get("/freeboard_api/dashboard/:name",
 		function (req,res){
 			fs.readFile(userDir+"freeboard_"+req.params.name+".json", function (err, data) {
 				if (err) {
